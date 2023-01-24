@@ -19,4 +19,13 @@ public class Card {
     @NotNull
     private String passwordCard;
 
+    @NotNull
+    private Double balance;
+
+    public Card(String cardNumber, String passwordCard) {
+        this.cardNumber = cardNumber;
+        this.passwordCard = passwordCard;
+        this.balance =  500.00;
+    }
+
 }
