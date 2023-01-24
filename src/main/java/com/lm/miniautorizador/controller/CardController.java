@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.concurrent.atomic.AtomicReference;
 
 @RestController
 @AllArgsConstructor
@@ -30,6 +31,15 @@ public class CardController {
         Card card = cardService.save(cardRequest.mapToCard());
         URI uri =  uriBuilder.path("/cartoes/{numeroCartao}").buildAndExpand(card.getCardNumber()).toUri();
         return ResponseEntity.created(uri).body(new CardResponse(card));
+    }
+
+    @GetMapping("{numeroCartao}")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Buscar um cartão pelo seu número")
+    public ResponseEntity<CardResponse> getCard(@PathVariable String numeroCartao) {
+        return cardService.getCardByNumber(numeroCartao).map(
+                card -> ResponseEntity.ok(new CardResponse(card)))
+                .orElse(ResponseEntity.notFound().build());
     }
 
 }
