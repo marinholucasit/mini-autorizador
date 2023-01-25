@@ -35,10 +35,10 @@ public class CardController {
 
     @GetMapping("{numeroCartao}")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Buscar um cartão pelo seu número")
-    public ResponseEntity<CardResponse> getCard(@PathVariable String numeroCartao) {
+    @Operation(summary = "Busca o saldo do cartão")
+    public ResponseEntity<Double> getBalance(@PathVariable String numeroCartao) {
         return cardService.getCardByNumber(numeroCartao).map(
-                card -> ResponseEntity.ok(new CardResponse(card)))
+                card -> ResponseEntity.ok(card.getBalance()))
                 .orElse(ResponseEntity.notFound().build());
     }
 
