@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Supplier;
 
 @RestController
 @AllArgsConstructor
@@ -28,9 +30,14 @@ public class CardController {
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Criar um novo cartão")
     public ResponseEntity<CardResponse> createCard(@RequestBody @Valid CardRequest cardRequest, UriComponentsBuilder uriBuilder) {
-        Card card = cardService.save(cardRequest.mapToCard());
-        URI uri =  uriBuilder.path("/cartoes/{numeroCartao}").buildAndExpand(card.getCardNumber()).toUri();
-        return ResponseEntity.created(uri).body(new CardResponse(card));
+        return cardService.getCardByNumber(cardRequest.getNumeroCartao()).map(
+                card -> ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(new CardResponse(card))
+            ).orElseGet(() -> {
+                Card card = cardService.save(cardRequest.mapToCard());
+                URI uri =  uriBuilder.path("/cartoes/{numeroCartao}").buildAndExpand(card.getCardNumber()).toUri();
+                return ResponseEntity.created(uri).body(new CardResponse(card));
+            }
+        );
     }
 
     @GetMapping("{numeroCartao}")
