@@ -27,7 +27,7 @@ public class CardController {
     @PostMapping(produces = { "application/json" })
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Criar um novo cartão")
-    public ResponseEntity<CardResponse> createCard(@Valid @RequestBody CardRequest cardRequest, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<CardResponse> createCard(@RequestBody @Valid CardRequest cardRequest, UriComponentsBuilder uriBuilder) {
         Card card = cardService.save(cardRequest.mapToCard());
         URI uri =  uriBuilder.path("/cartoes/{numeroCartao}").buildAndExpand(card.getCardNumber()).toUri();
         return ResponseEntity.created(uri).body(new CardResponse(card));
