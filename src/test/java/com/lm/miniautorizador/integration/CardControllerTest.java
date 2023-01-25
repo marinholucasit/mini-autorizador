@@ -3,9 +3,11 @@ package com.lm.miniautorizador.integration;
 import com.lm.miniautorizador.dto.request.CardRequest;
 import com.lm.miniautorizador.dto.response.CardResponse;
 import com.lm.miniautorizador.service.CardService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -22,6 +24,11 @@ public class CardControllerTest {
     private TestRestTemplate restTemplate;
     @Mock
     private CardService cardService;
+
+    @BeforeEach
+    public void beforeEach() {
+
+    }
 
     @Test
     public void ShouldCreateCardAndValidRequestReturns201() {
@@ -46,4 +53,20 @@ public class CardControllerTest {
         ResponseEntity<CardResponse> response = restTemplate.postForEntity("/cartoes", cardRequest, CardResponse.class);
         assertEquals("Response status code: "+response.getStatusCode(), HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
+
+    @Test
+    public void ShouldReturns200ToGetBalanceEqual500() {
+        CardRequest cardRequest = new CardRequest("123", "test");
+        restTemplate.postForEntity("/cartoes", cardRequest, CardResponse.class);
+        ResponseEntity<Double> response = restTemplate.getForEntity("/cartoes/123", Double.class);
+        assertEquals("Response status code: "+response.getStatusCode(), HttpStatus.OK, response.getStatusCode());
+        assertEquals("Response balance value: "+response.getBody(), 500.00, response.getBody());
+    }
+
+    @Test
+    public void ShouldReturns404WhenNotFound() {
+        ResponseEntity<Double> response = restTemplate.getForEntity("/cartoes/123test", Double.class);
+        assertEquals("Response status code: "+response.getStatusCode(), HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
 }
