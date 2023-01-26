@@ -1,6 +1,5 @@
-package com.lm.miniautorizador.dto.request;
+package com.lm.miniautorizador.model;
 
-import com.lm.miniautorizador.model.Transaction;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -12,18 +11,16 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TransactonRequest {
-    @NotNull
-    @NotEmpty
-    private String numeroCartao;
-    @NotNull
-    @NotEmpty
-    private String senhaCartao;
-    @NotNull
-    @NotEmpty
-    private Double valor;
+public class Transaction {
 
-    public Transaction mapToTransaction() {
-        return new Transaction(numeroCartao, senhaCartao, valor);
-    }
+    @NotNull
+    @NotEmpty
+    private String cardNumber;
+    @NotNull
+    @NotEmpty
+    private String cardPassword;
+    @NotNull
+    @NotEmpty
+    private Double transactionAmount;
+
 }
