@@ -7,11 +7,7 @@ import com.lm.miniautorizador.service.TransactionService;
 import com.lm.miniautorizador.utils.MessageTransaction;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
-
-import java.util.Map;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
