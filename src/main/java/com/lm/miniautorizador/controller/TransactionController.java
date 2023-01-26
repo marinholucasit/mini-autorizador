@@ -5,6 +5,7 @@ import com.lm.miniautorizador.service.TransactionService;
 import com.lm.miniautorizador.utils.MessageTransaction;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -24,7 +25,7 @@ public class TransactionController {
     @PostMapping(produces = { "application/json" })
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Realizar uma transação")
-    public ResponseEntity<String> transact(@RequestBody TransactonRequest transactionRequest) {
+    public ResponseEntity<String> transact(@RequestBody @Valid TransactonRequest transactionRequest) {
         MessageTransaction response = transactionService.performTransaction(transactionRequest.mapToTransaction());
         return ResponseEntity.status(response.getStatusCode()).body(response.getMessage());
     }

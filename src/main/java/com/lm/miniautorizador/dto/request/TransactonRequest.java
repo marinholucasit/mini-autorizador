@@ -20,7 +20,6 @@ public class TransactonRequest {
     @NotEmpty
     private String senhaCartao;
     @NotNull
-    @NotEmpty
     private Double valor;
 
     public Transaction mapToTransaction() {
