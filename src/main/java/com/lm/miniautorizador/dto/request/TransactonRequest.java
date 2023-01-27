@@ -1,6 +1,7 @@
 package com.lm.miniautorizador.dto.request;
 
 import com.lm.miniautorizador.model.Transaction;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -15,9 +16,10 @@ import lombok.Setter;
 public class TransactonRequest {
     @NotNull
     @NotEmpty
+    @Digits(integer = 100, fraction = 0, message = "{cardNumber.only.number}")
     private String numeroCartao;
-    @NotNull
-    @NotEmpty
+    @NotNull(message = "{password.not.null}")
+    @NotEmpty(message = "{password.not.empty}")
     private String senhaCartao;
     @NotNull
     private Double valor;

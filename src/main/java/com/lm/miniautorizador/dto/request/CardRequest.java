@@ -21,8 +21,8 @@ public class CardRequest {
     @Digits(integer = 100, fraction = 0, message = "{cardNumber.only.number}")
     private String numeroCartao;
 
-    @NotNull
-    @NotEmpty
+    @NotNull(message = "{password.not.null}")
+    @NotEmpty(message = "{password.not.empty}")
     private String senha;
 
     public Card mapToCard() {
