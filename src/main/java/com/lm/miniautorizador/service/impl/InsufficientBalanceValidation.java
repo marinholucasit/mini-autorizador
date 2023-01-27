@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class PasswordValidation implements Validator<String> {
+public class InsufficientBalanceValidation implements Validator<String> {
 
     private final CardRepository cardRepository;
 
@@ -19,8 +19,8 @@ public class PasswordValidation implements Validator<String> {
     public String validation(Transaction transaction) {
         Optional<Card> cardOptional = cardRepository.findById(transaction.getCardNumber());
         return cardOptional
-                .filter(card -> card.getPasswordCard().equals(transaction.getCardPassword()))
+                .filter(card -> card.getBalance() >= transaction.getTransactionAmount())
                 .map(card -> "")
-                .orElse("SENHA_INVALIDA|");
+                .orElse("SALDO_INSUFICIENTE|");
     }
 }

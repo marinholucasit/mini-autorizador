@@ -23,9 +23,8 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public MessageTransaction performTransaction(Transaction transaction) {
-        String message = "";
-        message += validate(new PasswordValidation(cardRepository), transaction);
-        message += validate(new NonExistentCardValidation(cardRepository), transaction);
+        String message = validate(transaction);
+
         if (message.isEmpty()) {
             return new MessageTransaction("OK", HttpStatus.CREATED);
         } else {
@@ -33,8 +32,15 @@ public class TransactionServiceImpl implements TransactionService {
         }
     }
 
-    private String validate(Validator validator, Transaction transaction) {
-        return validator.validation(transaction)+"|";
+    private String validate(Transaction transaction) {
+        String message = "";
+        message += new NonExistentCardValidation(cardRepository).validation(transaction);
+        message += new PasswordValidation(cardRepository).validation(transaction);
+        if (message.isEmpty()) {
+            message += new InsufficientBalanceValidation(cardRepository).validation(transaction);
+        }
+
+        return message;
     }
 
     private void deductBalance(Double amountTransaction, Card card) {

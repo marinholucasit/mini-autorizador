@@ -18,6 +18,6 @@ public class NonExistentCardValidation implements Validator<String> {
     @Override
     public String validation(Transaction transaction) {
         Optional<Card> cardOptional = cardRepository.findById(transaction.getCardNumber());
-        return cardOptional.map(card -> "").orElse("CARTAO_INEXISTENTE");
+        return cardOptional.map(card -> "").orElse("CARTAO_INEXISTENTE|");
     }
 }
