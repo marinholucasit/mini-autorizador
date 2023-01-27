@@ -20,48 +20,21 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Autowired
     private CardRepository cardRepository;
-    
 
     @Override
     public MessageTransaction performTransaction(Transaction transaction) {
         String message = "";
         message += validate(new PasswordValidation(cardRepository), transaction);
-
+        message += validate(new NonExistentCardValidation(cardRepository), transaction);
         if (message.isEmpty()) {
             return new MessageTransaction("OK", HttpStatus.CREATED);
         } else {
             return new MessageTransaction(message, HttpStatus.UNPROCESSABLE_ENTITY);
         }
-
-
-
-//        String message = "";
-//        Optional<Card> card = cardRepository.findById(transaction.getCardNumber());
-//        verifyCardExists(card);
-//        verifyPassword(transaction.getCardPassword(), card.get());
-//        verifyEnoughBalance(transaction.getTransactionAmount(), card.get());
-//        if (message.isEmpty()) {
-//            deductBalance(transaction.getTransactionAmount(), card.get());
-//            return new MessageTransaction("OK", HttpStatus.CREATED);
-//        } else {
-//            return new MessageTransaction(message, HttpStatus.UNPROCESSABLE_ENTITY);
-//        }
     }
 
     private String validate(Validator validator, Transaction transaction) {
-        return validator.validation(transaction);
-    }
-
-    private void verifyCardExists(Optional<Card> card) {
-        //this.message += (card.isEmpty())? "|CARTAO_INEXISTENTE": "";
-    }
-
-    private void verifyPassword(String password, Card card) {
-        //this.message += (password != card.getPasswordCard())? "|SENHA_INVALIDA": "";
-    }
-
-    private void verifyEnoughBalance(Double amountTransaction, Card card) {
-        //this.message += (amountTransaction > card.getBalance())? "|SALDO_INSUFICIENTE": "";
+        return validator.validation(transaction)+"|";
     }
 
     private void deductBalance(Double amountTransaction, Card card) {

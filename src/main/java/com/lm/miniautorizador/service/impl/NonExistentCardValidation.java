@@ -11,16 +11,13 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class PasswordValidation implements Validator<String> {
+public class NonExistentCardValidation implements Validator<String> {
 
     private final CardRepository cardRepository;
 
     @Override
     public String validation(Transaction transaction) {
         Optional<Card> cardOptional = cardRepository.findById(transaction.getCardNumber());
-        return cardOptional
-                .filter(card -> card.getPasswordCard().equals(transaction.getCardPassword()))
-                .map(card -> "")
-                .orElse("SENHA_INVALIDA");
+        return cardOptional.map(card -> "").orElse("CARTAO_INEXISTENTE");
     }
 }
