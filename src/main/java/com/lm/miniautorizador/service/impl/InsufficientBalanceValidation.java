@@ -21,6 +21,6 @@ public class InsufficientBalanceValidation implements Validator<String> {
         return cardOptional
                 .filter(card -> card.getBalance() >= transaction.getTransactionAmount())
                 .map(card -> "")
-                .orElse("SALDO_INSUFICIENTE|");
+                .orElse("SALDO_INSUFICIENTE");
     }
 }
